@@ -31,7 +31,7 @@ train["Prediction"] <- prediction
 ll.null <- logit_model$null.deviance/-2
 ll.proposed <- logit_model$deviance/-2
 p_value <- 1 - pchisq(2*(ll.proposed - ll.null),df=(length(logit_model$coefficients)-1))
-r_square = (ll.null - ll.proposed) / ll.null
+r_square <- (ll.null - ll.proposed) / ll.null
 cat("McFadden's Psuedo R^2 Square:",r_square,"\n")
 cat("P-Value:",p_value)
 
