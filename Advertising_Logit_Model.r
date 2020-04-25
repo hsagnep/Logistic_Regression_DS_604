@@ -14,27 +14,37 @@ train_ind <- sample(seq_len(nrow(data)),size=smp_size)
 train <- data[train_ind, ]
 test <- data[-train_ind, ]
 
-#Selecting variables to use in logistic regression
-y <- train$Clicked.on.Ad
-x1 <- train$Daily.Time.Spent.on.Site
-x2 <- train$Area.Income
-
 #Creating logistic model of training data
-logit_model <- glm(y ~ x1 + x2,family = "binomial")
+logit_model <- glm(Clicked.on.Ad ~ Daily.Time.Spent.on.Site + Area.Income,data=train,family = "binomial")
 summary(logit_model)
 
 #Predicting probability on testing data
-prediction <- predict.glm(logit_model,train,type='response')
-train["Prediction"] <- prediction
+prediction <- predict.glm(logit_model,test,type='response')
+test["Predictions"] <- prediction
+predict <- predict(logit_model,test,type='response')
+
+
+#Testing results
+test["Prediction"] <- ifelse(test["Predictions"] < .5,0,1)
+actual_frequency <- table(test$Clicked.on.Ad)
+predicted_frequency <- table(test$Prediction)
+
+#Creating barplots for frequencies
+barplot(actual_frequency,xlab="Clicked on ad?",main="Actual Training Frequency",ylim=c(0,400),col=c("Red","Green"))
+barplot(predicted_frequency,xlab="Clicked on ad?",main="Predicted Training Frequency",ylim=c(0,400),col=c("Red","Green"))
+
 
 #McFadden's Pseudo R^2 and P-Value
 ll.null <- logit_model$null.deviance/-2
 ll.proposed <- logit_model$deviance/-2
 p_value <- 1 - pchisq(2*(ll.proposed - ll.null),df=(length(logit_model$coefficients)-1))
-r_square <- (ll.null - ll.proposed) / ll.null
+r_square = (ll.null - ll.proposed) / ll.null
 cat("McFadden's Psuedo R^2 Square:",r_square,"\n")
 cat("P-Value:",p_value)
 
+#Values for testing slopes
+p_values <- coef(summary(logit_model))[,'Pr(>|z|)']
+z_values <- coef(summary(logit_model))[,'z value']
 
 
 
