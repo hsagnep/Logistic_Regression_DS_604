@@ -6,6 +6,19 @@ column_names <- c("Clicked.on.Ad","Daily.Time.Spent.on.Site","Area.Income")
 data <- data[column_names]
 head(data)
 
+#Simple logistic regression
+clicked <- data$Clicked.on.Ad
+daily_time <- data$Daily.Time.Spent.on.Site
+model <- glm(clicked ~ daily_time,family='binomial')
+
+#Plotting simple logistic regression curve
+plot(daily_time,clicked,pch=19)
+xv <- seq(min(daily_time),max(daily_time),.01)
+yv <- predict(model,list(daily_time=xv),type="response")
+lines(xv,yv)
+
+####Multivariable Logistic Regression
+
 #Examining correlation, looking for colinearity 
 cor(data)
 
@@ -34,6 +47,7 @@ test
 #Creating barplots for frequencies
 barplot(actual_frequency,xlab="Clicked on ad?",main="Actual Training Frequency",ylim=c(0,400),col=c("Red","Green"))
 barplot(predicted_frequency,xlab="Clicked on ad?",main="Predicted Training Frequency",ylim=c(0,400),col=c("Red","Green"))
+
 
 #McFadden's Pseudo R^2 and P-Value
 ll.null <- logit_model$null.deviance/-2
