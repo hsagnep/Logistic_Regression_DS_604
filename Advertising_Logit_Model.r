@@ -42,7 +42,7 @@ predict <- predict(logit_model,test,type='response')
 test["Prediction"] <- ifelse(test["Predictions"] < .5,0,1)
 actual_frequency <- table(test$Clicked.on.Ad)
 predicted_frequency <- table(test$Prediction)
-test
+head(test)
 
 #Creating barplots for frequencies
 barplot(actual_frequency,xlab="Clicked on ad?",main="Actual Training Frequency",ylim=c(0,250),col=c("Red","Green"))
@@ -61,3 +61,6 @@ cat("P-Value:",p_value)
 #Values for testing slopes
 p_values <- coef(summary(logit_model))[,'Pr(>|z|)']
 z_values <- coef(summary(logit_model))[,'z value']
+critical_z <- qnorm(.025,lower.tail=FALSE)
+cat("Critizal-Z:",critical_z)
+
