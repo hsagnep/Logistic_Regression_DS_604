@@ -12,7 +12,7 @@ daily_time <- data$Daily.Time.Spent.on.Site
 model <- glm(clicked ~ daily_time,family='binomial')
 
 #Plotting simple logistic regression curve
-plot(daily_time,clicked,pch=19)
+plot(daily_time,clicked,pch=19,main="Simple Logistic Regression",xlab="Daily Time Spent on Site",ylab="Probability of clicking on Ad")
 xv <- seq(min(daily_time),max(daily_time),.01)
 yv <- predict(model,list(daily_time=xv),type="response")
 lines(xv,yv)
