@@ -45,10 +45,10 @@ predicted_frequency <- table(test$Prediction)
 test
 
 #Creating barplots for frequencies
-barplot(actual_frequency,xlab="Clicked on ad?",main="Actual Training Frequency",ylim=c(0,400),col=c("Red","Green"))
-barplot(predicted_frequency,xlab="Clicked on ad?",main="Predicted Training Frequency",ylim=c(0,400),col=c("Red","Green"))
-
-
+barplot(actual_frequency,xlab="Clicked on ad?",main="Actual Training Frequency",ylim=c(0,250),col=c("Red","Green"))
+legend("topleft", legend = c(actual_frequency["0"],actual_frequency["1"]),col=c("Red","Green"),bty = "n", pch=20 , pt.cex = 2, cex = 0.8, horiz = FALSE, inset = c(0.05, 0.05))
+barplot(predicted_frequency,xlab="Clicked on ad?",main="Predicted Training Frequency",ylim=c(0,250),col=c("Red","Green"))
+legend("topleft", legend = c(predicted_frequency["0"],predicted_frequency["1"]),col=c("Red","Green"),bty = "n", pch=20 , pt.cex = 2, cex = 0.8, horiz = FALSE, inset = c(0.05, 0.05))
 #McFadden's Pseudo R^2 and P-Value
 ll.null <- logit_model$null.deviance/-2
 ll.proposed <- logit_model$deviance/-2
@@ -60,4 +60,3 @@ cat("P-Value:",p_value)
 #Values for testing slopes
 p_values <- coef(summary(logit_model))[,'Pr(>|z|)']
 z_values <- coef(summary(logit_model))[,'z value']
-
