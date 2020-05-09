@@ -1,5 +1,3 @@
-#To do: Chi-Square test, slope tests using Z-values and P-values
-
 #Importing data
 data <- read.csv('/Users/hervinsagnep/Fixed\ Advertising.csv')
 column_names <- c("Clicked.on.Ad","Daily.Time.Spent.on.Site","Area.Income")
@@ -10,6 +8,7 @@ head(data)
 clicked <- data$Clicked.on.Ad
 daily_time <- data$Daily.Time.Spent.on.Site
 model <- glm(clicked ~ daily_time,family='binomial')
+summary(model)
 
 #Plotting simple logistic regression curve
 plot(daily_time,clicked,pch=19,main="Simple Logistic Regression",xlab="Daily Time Spent on Site",ylab="Probability of clicking on Ad")
@@ -36,10 +35,10 @@ summary(logit_model)
 #Predicting probability on testing data
 prediction <- predict.glm(logit_model,test,type='response')
 test["Predictions"] <- prediction
-predict <- predict(logit_model,test,type='response')
+head(test["Predictions"])
 
 #Testing results
-test["Prediction"] <- ifelse(test["Predictions"] < .5,0,1)
+test["Prediction"] <- ifelse(test["Predictions"] <= .5,0,1)
 actual_frequency <- table(test$Clicked.on.Ad)
 predicted_frequency <- table(test$Prediction)
 head(test)
@@ -62,5 +61,7 @@ cat("P-Value:",p_value)
 p_values <- coef(summary(logit_model))[,'Pr(>|z|)']
 z_values <- coef(summary(logit_model))[,'z value']
 critical_z <- qnorm(.025,lower.tail=FALSE)
-cat("Critizal-Z:",critical_z)
+cat("Critical-Z:",critical_z)
+cat("P-Values:",p_values)
+cat("Z-Values:",z_values)
 
